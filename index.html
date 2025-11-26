@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dars Rejalari - Informatika</title>
+    <style>
+      :root {
+        --primary: #3498db;
+        --secondary: #2ecc71;
+        --accent: #e74c3c;
+        --dark: #2c3e50;
+        --light: #ecf0f1;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background: #f5f7fa;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .header h1 {
+        color: var(--dark);
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        color: #666;
+        font-size: 1.1rem;
+      }
+
+      .filters {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .filter-btn {
+        padding: 10px 20px;
+        border: 2px solid var(--primary);
+        background: white;
+        color: var(--primary);
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 600;
+      }
+
+      .filter-btn.active,
+      .filter-btn:hover {
+        background: var(--primary);
+        color: white;
+      }
+
+      .lessons-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+
+      .lesson-card {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        border-left: 5px solid var(--primary);
+      }
+
+      .lesson-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .lesson-card.beginner {
+        border-left-color: var(--secondary);
+      }
+
+      .lesson-card.intermediate {
+        border-left-color: var(--primary);
+      }
+
+      .lesson-card.advanced {
+        border-left-color: var(--accent);
+      }
+
+      .lesson-number {
+        background: var(--primary);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      .lesson-title {
+        font-size: 1.3rem;
+        color: var(--dark);
+        margin-bottom: 10px;
+      }
+
+      .lesson-duration {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .lesson-objectives {
+        margin-bottom: 15px;
+      }
+
+      .lesson-objectives h4 {
+        color: var(--dark);
+        margin-bottom: 8px;
+      }
+
+      .lesson-objectives ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .lesson-objectives li {
+        padding: 5px 0;
+        padding-left: 20px;
+        position: relative;
+      }
+
+      .lesson-objectives li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: var(--secondary);
+        font-weight: bold;
+      }
+
+      .lesson-materials {
+        background: var(--light);
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 15px;
+      }
+
+      .lesson-materials h4 {
+        color: var(--dark);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .materials-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .material-tag {
+        background: white;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        border: 1px solid #ddd;
+      }
+
+      .download-section {
+        text-align: center;
+        margin-top: 50px;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--secondary);
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s;
+        margin: 10px;
+      }
+
+      .download-btn:hover {
+        background: #27ae60;
+        transform: translateY(-2px);
+      }
+
+      .level-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .level-beginner {
+        background: #d4edda;
+        color: #155724;
+      }
+
+      .level-intermediate {
+        background: #d1ecf1;
+        color: #0c5460;
+      }
+
+      .level-advanced {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      @media (max-width: 768px) {
+        .lessons-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .filters {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .filter-btn {
+          width: 200px;
+        }
+      }
+
+      .search-box {
+        max-width: 500px;
+        margin: 0 auto 30px;
+        position: relative;
+      }
+
+      .search-box input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #ddd;
+        border-radius: 25px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      .search-box input:focus {
+        outline: none;
+        border-color: var(--primary);
+      }
+
+      .search-icon {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1><i class="fas fa-book-open"></i> Informatika Dars Rejalari</h1>
+        <p>36 ta tayyor dars rejasi va o'quv materiallari</p>
+      </div>
+
+      <div class="search-box">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Dars nomi yoki kalit so'zlar bo'yicha qidirish..."
+        />
+        <i class="fas fa-search search-icon"></i>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" onclick="filterLessons('all')">
+          Hammasi
+        </button>
+        <button class="filter-btn" onclick="filterLessons('beginner')">
+          Boshlang'ich
+        </button>
+        <button class="filter-btn" onclick="filterLessons('intermediate')">
+          O'rta
+        </button>
+        <button class="filter-btn" onclick="filterLessons('advanced')">
+          Murakkab
+        </button>
+        <button class="filter-btn" onclick="filterLessons('programming')">
+          Dasturlash
+        </button>
+        <button class="filter-btn" onclick="filterLessons('internet')">
+          Internet
+        </button>
+      </div>
+
+      <div class="lessons-grid" id="lessonsContainer">
+        <!-- Dars rejalari JavaScript orqali yuklanadi -->
+      </div>
+
+      <div class="download-section">
+        <h2>Barcha Materiallarni Yuklab Olish</h2>
+        <p>
+          36 ta darsning barcha materiallari, prezentatsiyalari va qo'llanmalari
+        </p>
+        <div>
+          <a href="#" class="download-btn">
+            <i class="fas fa-download"></i> PDF Formatda Yuklab Olish
+          </a>
+          <a href="#" class="download-btn">
+            <i class="fas fa-file-word"></i> Word Formatda Yuklab Olish
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Dars rejalari ma'lumotlari
+      const lessons = [
+        {
+          id: 1,
+          title: "Kompyuter Tuzilmasi va Ishlash Prinsipi",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "hardware",
+          objectives: [
+            "Kompyuterning asosiy qismlarini tanishish",
+            "Protsessor, xotira, qattiq disk vazifalarini o'rganish",
+            "Kompyuter ishlash prinsipini tushunish",
+          ],
+          materials: [
+            "Prezentatsiya",
+            "Video darslik",
+            "Test savollari",
+            "Laboratoriya ishi",
+          ],
+        },
+        {
+          id: 2,
+          title: "Operatsion Tizimlar va Ularning Vazifalari",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "software",
+          objectives: [
+            "Operatsion tizim tushunchasini o'rganish",
+            "Windows va Linux tizimlarini solishtirish",
+            "OS ning asosiy funksiyalarini tushunish",
+          ],
+          materials: ["Prezentatsiya", "Amaliy mashqlar", "Diagrammalar"],
+        },
+        {
+          id: 3,
+          title: "Fayl Tizimlari va Ma'lumotlarni Tashkil Qilish",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "software",
+          objectives: [
+            "Fayl va papka tushunchalari",
+            "Fayl turlari va kengaytmalari",
+            "Ma'lumotlarni tartibga solish usullari",
+          ],
+          materials: ["Prezentatsiya", "Amaliy topshiriq", "Qo'llanma"],
+        },
+        {
+          id: 4,
+          title: "Matn Muharrirlari va Ulardan Foydalanish",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "software",
+          objectives: [
+            "Word dasturini o'rganish",
+            "Matn formatlash usullari",
+            "Hujjat yaratish va saqlash",
+          ],
+          materials: ["Video darslik", "Amaliy mashqlar", "Namuna hujjatlar"],
+        },
+        {
+          id: 5,
+          title: "Elektron Jadval Dasturlari (Excel)",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "software",
+          objectives: [
+            "Excel dasturi interfeysi",
+            "Formulalar va funksiyalar",
+            "Diagramma yaratish",
+          ],
+          materials: [
+            "Prezentatsiya",
+            "Amaliy topshiriq",
+            "Formula qo'llanmasi",
+          ],
+        },
+        {
+          id: 6,
+          title: "Internet va Global Tarmoqlar",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "internet",
+          objectives: [
+            "Internet tushunchasi va tarixi",
+            "Brauzerlar va ulardan foydalanish",
+            "Xavfsiz internet foydalanish",
+          ],
+          materials: ["Prezentatsiya", "Video", "Xavfsizlik qo'llanmasi"],
+        },
+        {
+          id: 7,
+          title: "Elektron Pochta va Unumli Foydalanish",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "internet",
+          objectives: [
+            "Elektron pochta yaratish",
+            "Xat yuborish va qabul qilish",
+            "Pochta qutisini tartibga solish",
+          ],
+          materials: ["Amaliy mashq", "Qo'llanma", "Video darslik"],
+        },
+        {
+          id: 8,
+          title: "Dasturlash Asoslari: Algoritm va Dastur",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "programming",
+          objectives: [
+            "Algoritm tushunchasi",
+            "Dasturlash tillari turlari",
+            "Oddiy algoritmlar yaratish",
+          ],
+          materials: [
+            "Prezentatsiya",
+            "Algoritm misollari",
+            "Amaliy topshiriq",
+          ],
+        },
+        {
+          id: 9,
+          title: "Scratch Dasturida Birinchi Loyiha",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "programming",
+          objectives: [
+            "Scratch interfeysini o'rganish",
+            "Bloklar orqali dastur yaratish",
+            "Oddiy animatsiya yaratish",
+          ],
+          materials: ["Video darslik", "Loyiha shabloni", "Qo'llanma"],
+        },
+        {
+          id: 10,
+          title: "Python: Birinchi Dasturim",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "programming",
+          objectives: [
+            "Python dasturini o'rnatish",
+            "Print funksiyasi bilan ishlash",
+            "O'zgaruvchilar bilan tanishish",
+          ],
+          materials: ["Prezentatsiya", "Kod namunalari", "Amaliy topshiriq"],
+        },
+        {
+          id: 11,
+          title: "Ma'lumotlar Turlari va O'zgaruvchilar",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "programming",
+          objectives: [
+            "Ma'lumotlar turlarini o'rganish",
+            "O'zgaruvchilar bilan ishlash",
+            "Turli son turlarini tushunish",
+          ],
+          materials: ["Prezentatsiya", "Kod misollari", "Test"],
+        },
+        {
+          id: 12,
+          title: "Shart Operatorlari (if-else)",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "programming",
+          objectives: [
+            "Shartli operatorlar tushunchasi",
+            "If-else qurilmasini o'rganish",
+            "Mantiqiy shartlarni yozish",
+          ],
+          materials: ["Video darslik", "Amaliy mashqlar", "Loyiha"],
+        },
+        {
+          id: 13,
+          title: "Sikllar va Takrorlanuvchi Amallar",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "programming",
+          objectives: [
+            "For va while sikllari",
+            "Sikl parametrlari bilan ishlash",
+            "Takrorlanuvchi masalalarni yechish",
+          ],
+          materials: ["Prezentatsiya", "Kod namunalari", "Masalalar to'plami"],
+        },
+        {
+          id: 14,
+          title: "Funksiyalar va Ularning Qo'llanilishi",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "programming",
+          objectives: [
+            "Funksiya tushunchasi",
+            "Funksiya yaratish va chaqirish",
+            "Parametrlar va qaytarish qiymatlari",
+          ],
+          materials: [
+            "Video darslik",
+            "Amaliy topshiriq",
+            "Funksiya kutubxonasi",
+          ],
+        },
+        {
+          id: 15,
+          title: "Massivlar va Ro'yxatlar",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "programming",
+          objectives: [
+            "Massiv tushunchasi",
+            "Ro'yxatlar bilan ishlash",
+            "Massiv elementlariga murojaat qilish",
+          ],
+          materials: ["Prezentatsiya", "Kod misollari", "Amaliy mashq"],
+        },
+        {
+          id: 16,
+          title: "Grafika va Animatsiya Dasturlash",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "programming",
+          objectives: [
+            "Grafik kutubxonalar bilan ishlash",
+            "Oddiy grafik obyektlar yaratish",
+            "Animatsiya prinsiplari",
+          ],
+          materials: ["Video darslik", "Loyiha shabloni", "Kod kutubxonasi"],
+        },
+        {
+          id: 17,
+          title: "Ma'lumotlar Bazasi Asoslari",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "database",
+          objectives: [
+            "Ma'lumotlar bazasi tushunchasi",
+            "SQL so'rovlarini o'rganish",
+            "Oddiy ma'lumotlar bazasi yaratish",
+          ],
+          materials: ["Prezentatsiya", "SQL qo'llanmasi", "Amaliy topshiriq"],
+        },
+        {
+          id: 18,
+          title: "Veb-sahifa Yaratish Asoslari (HTML)",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "web",
+          objectives: [
+            "HTML asosiy tuzilmasi",
+            "Teglar va atributlar",
+            "Oddiy veb-sahifa yaratish",
+          ],
+          materials: ["Prezentatsiya", "HTML shabloni", "Amaliy loyiha"],
+        },
+        {
+          id: 19,
+          title: "Veb-sahifani Bezash (CSS)",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "web",
+          objectives: [
+            "CSS sintaksisi",
+            "Ranglar va shriftlar",
+            "Elementlarni joylashtirish",
+          ],
+          materials: ["Video darslik", "CSS qo'llanmasi", "Loyiha"],
+        },
+        {
+          id: 20,
+          title: "Interaktiv Veb-sahifalar (JavaScript)",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "web",
+          objectives: [
+            "JavaScript asoslari",
+            "DOM bilan ishlash",
+            "Interaktiv elementlar yaratish",
+          ],
+          materials: ["Prezentatsiya", "Kod namunalari", "Loyiha"],
+        },
+        {
+          id: 21,
+          title: "Rasmli Ma'lumotlar va Grafika",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "multimedia",
+          objectives: [
+            "Rasm formatlari",
+            "Grafik dasturlar bilan ishlash",
+            "Rasmlarni qayta ishlash",
+          ],
+          materials: ["Video darslik", "Amaliy topshiriq", "Namuna fayllar"],
+        },
+        {
+          id: 22,
+          title: "Audio va Video Ma'lumotlar",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "multimedia",
+          objectives: [
+            "Audio-video formatlar",
+            "Media fayllarni qayta ishlash",
+            "Oddiy video montaj",
+          ],
+          materials: ["Prezentatsiya", "Amaliy mashq", "Media kutubxonasi"],
+        },
+        {
+          id: 23,
+          title: "Sun'iy Intellekt Asoslari",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "ai",
+          objectives: [
+            "AI tushunchasi va tarixi",
+            "Machine learning asoslari",
+            "AI ning qo'llanilish sohalari",
+          ],
+          materials: ["Prezentatsiya", "Video materiallar", "Maqolalar"],
+        },
+        {
+          id: 24,
+          title: "Kiberxavfsizlik Asoslari",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "security",
+          objectives: [
+            "Kiberxavfsizlik tushunchasi",
+            "Parol xavfsizligi",
+            "Viruslardan himoyalanish",
+          ],
+          materials: ["Prezentatsiya", "Xavfsizlik qo'llanmasi", "Test"],
+        },
+        {
+          id: 25,
+          title: "Bulut Texnologiyalari",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "cloud",
+          objectives: [
+            "Bulut hisoblash tushunchasi",
+            "Bulut xizmatlaridan foydalanish",
+            "Ma'lumotlarni bulutda saqlash",
+          ],
+          materials: ["Video darslik", "Amaliy topshiriq", "Qo'llanma"],
+        },
+        {
+          id: 26,
+          title: "Mobil Ilovalar Yaratish",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "mobile",
+          objectives: [
+            "Mobil ilova turlari",
+            "Ilova interfeysi dizayni",
+            "Oddiy mobil ilova yaratish",
+          ],
+          materials: ["Prezentatsiya", "Loyiha shabloni", "Kod namunalari"],
+        },
+        {
+          id: 27,
+          title: "Robototexnika Asoslari",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "robotics",
+          objectives: [
+            "Robototexnika tushunchasi",
+            "Sensorlar va aktuatorlar",
+            "Oddiy robot loyihasi",
+          ],
+          materials: ["Video darslik", "Loyiha qo'llanmasi", "Diagrammalar"],
+        },
+        {
+          id: 28,
+          title: "3D Modellashtirish",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "3d",
+          objectives: [
+            "3D modellashtirish asoslari",
+            "Oddiy 3D obyekt yaratish",
+            "Materiallar va teksturalar",
+          ],
+          materials: ["Video darslik", "Amaliy topshiriq", "3D modellar"],
+        },
+        {
+          id: 29,
+          title: "Ma'lumotlarni Vizualizatsiya Qilish",
+          duration: "45 daqiqa",
+          level: "intermediate",
+          category: "data",
+          objectives: [
+            "Vizualizatsiya turlari",
+            "Diagrammalar yaratish",
+            "Ma'lumotlarni tahlil qilish",
+          ],
+          materials: ["Prezentatsiya", "Amaliy mashq", "Namuna ma'lumotlar"],
+        },
+        {
+          id: 30,
+          title: "Loyiha Boshqaruvi Asoslari",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "project",
+          objectives: [
+            "Loyiha boshqaruvi tushunchasi",
+            "Vazifalarni rejalashtirish",
+            "Loyiha bosqichlari",
+          ],
+          materials: ["Prezentatsiya", "Loyiha shabloni", "Vazifa plani"],
+        },
+        {
+          id: 31,
+          title: "Ijodiy Dasturlash Loyihasi",
+          duration: "90 daqiqa",
+          level: "advanced",
+          category: "programming",
+          objectives: [
+            "Mustaqil loyiha yaratish",
+            "Dasturni loyihalash va amalga oshirish",
+            "Loyihani himoya qilish",
+          ],
+          materials: [
+            "Loyiha talablari",
+            "Baholash mezonlari",
+            "Namuna loyihalar",
+          ],
+        },
+        {
+          id: 32,
+          title: "Dasturiy Ta'minot Testlash",
+          duration: "45 daqiqa",
+          level: "advanced",
+          category: "programming",
+          objectives: [
+            "Testlash turlari",
+            "Xatolarni topish va tuzatish",
+            "Test rejalari tuzish",
+          ],
+          materials: ["Prezentatsiya", "Test holatlari", "Amaliy topshiriq"],
+        },
+        {
+          id: 33,
+          title: "IT Kasblar va Karyera",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "career",
+          objectives: [
+            "IT sohasidagi kasblar",
+            "Karyera yo'nalishlari",
+            "Zamonaviy IT trendlari",
+          ],
+          materials: ["Prezentatsiya", "Kasblar galereyasi", "Maqolalar"],
+        },
+        {
+          id: 34,
+          title: "Raqamli Madaniyat va Axloq",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "ethics",
+          objectives: [
+            "Raqamli madaniyat tushunchasi",
+            "Internetda axloqiy qoidalar",
+            "Mualliflik huquqi",
+          ],
+          materials: ["Video materiallar", "Viktorina", "Qo'llanma"],
+        },
+        {
+          id: 35,
+          title: "Texnologiyalar Tarixi",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "history",
+          objectives: [
+            "Kompyuterlar tarixi",
+            "Internet rivojlanishi",
+            "Texnologik inqiloblar",
+          ],
+          materials: ["Prezentatsiya", "Tarixiy maqolalar", "Timeline"],
+        },
+        {
+          id: 36,
+          title: "Informatika Fanining Kelajagi",
+          duration: "45 daqiqa",
+          level: "beginner",
+          category: "future",
+          objectives: [
+            "Yangi texnologiyalar",
+            "Kelajakdagi IT trendlari",
+            "Informatikaning rivojlanish yo'nalishlari",
+          ],
+          materials: ["Prezentatsiya", "Maqolalar", "Diskussiya materiallari"],
+        },
+      ];
+
+      // Dars rejalarini yuklash
+      function loadLessons(filter = "all", searchTerm = "") {
+        const container = document.getElementById("lessonsContainer");
+        container.innerHTML = "";
+
+        const filteredLessons = lessons.filter((lesson) => {
+          const matchesFilter =
+            filter === "all" ||
+            lesson.level === filter ||
+            lesson.category === filter;
+
+          const matchesSearch =
+            searchTerm === "" ||
+            lesson.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            lesson.objectives.some((obj) =>
+              obj.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+          return matchesFilter && matchesSearch;
+        });
+
+        if (filteredLessons.length === 0) {
+          container.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                        <i class="fas fa-search" style="font-size: 3rem; color: #ccc; margin-bottom: 20px;"></i>
+                        <h3 style="color: #666;">Hech qanday dars topilmadi</h3>
+                        <p>Boshqa kalit so'zlar yoki filtrlardan foydalaning</p>
+                    </div>
+                `;
+          return;
+        }
+
+        filteredLessons.forEach((lesson) => {
+          const levelClass = `level-${lesson.level}`;
+          const levelText =
+            lesson.level === "beginner"
+              ? "Boshlangʻich"
+              : lesson.level === "intermediate"
+              ? "Oʻrta"
+              : "Murakkab";
+
+          const lessonCard = document.createElement("div");
+          lessonCard.className = `lesson-card ${lesson.level}`;
+          lessonCard.innerHTML = `
+                    <div class="lesson-number">${lesson.id}</div>
+                    <span class="level-badge ${levelClass}">${levelText}</span>
+                    <h3 class="lesson-title">${lesson.title}</h3>
+                    <div class="lesson-duration">
+                        <i class="far fa-clock"></i> ${lesson.duration}
+                    </div>
+                    <div class="lesson-objectives">
+                        <h4><i class="fas fa-bullseye"></i> Dars Maqsadlari:</h4>
+                        <ul>
+                            ${lesson.objectives
+                              .map((obj) => `<li>${obj}</li>`)
+                              .join("")}
+                        </ul>
+                    </div>
+                    <div class="lesson-materials">
+                        <h4><i class="fas fa-download"></i> O'quv Materiallari:</h4>
+                        <div class="materials-list">
+                            ${lesson.materials
+                              .map(
+                                (mat) =>
+                                  `<span class="material-tag">${mat}</span>`
+                              )
+                              .join("")}
+                        </div>
+                    </div>
+                `;
+          container.appendChild(lessonCard);
+        });
+      }
+
+      // Filtrlash funksiyasi
+      function filterLessons(filter) {
+        // Filter tugmalarini yangilash
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        event.target.classList.add("active");
+
+        loadLessons(filter, document.getElementById("searchInput").value);
+      }
+
+      // Qidiruv funksiyasi
+      function setupSearch() {
+        const searchInput = document.getElementById("searchInput");
+        let searchTimeout;
+
+        searchInput.addEventListener("input", function () {
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(() => {
+            const activeFilter = document
+              .querySelector(".filter-btn.active")
+              .textContent.toLowerCase();
+            let filter = "all";
+
+            if (activeFilter.includes("boshlangʻich")) filter = "beginner";
+            else if (activeFilter.includes("oʻrta")) filter = "intermediate";
+            else if (activeFilter.includes("murakkab")) filter = "advanced";
+            else if (activeFilter.includes("dasturlash"))
+              filter = "programming";
+            else if (activeFilter.includes("internet")) filter = "internet";
+
+            loadLessons(filter, this.value);
+          }, 300);
+        });
+      }
+
+      // Dastlabki yuklash
+      document.addEventListener("DOMContentLoaded", function () {
+        loadLessons();
+        setupSearch();
+      });
+    </script>
+  </body>
+</html>
